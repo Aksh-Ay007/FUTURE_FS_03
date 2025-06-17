@@ -16,7 +16,7 @@ const UserSignUp = () => {
       e.preventDefault()
 
       setUserData({
-        username:{
+        fullName:{
           firstName:firstName,
           lastName:lastName
         },
