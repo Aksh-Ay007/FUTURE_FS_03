@@ -1,9 +1,16 @@
 const express = require("express");
+const cors = require("cors"); // <-- Add this line
 
 const cookieParser = require("cookie-parser"); // Import cookie-parser if you need to handle cookies
 
 const app = express();
 const connectDB = require("./config/database");
+// Enable CORS for your frontend origin and allow credentials (cookies)
+app.use(cors({
+  origin: "http://localhost:5174",
+  credentials: true
+}));
+
 app.use(express.json());
 app.use(cookieParser()); // Use cookie-parser middleware if you need to handle cookies
 

@@ -1,21 +1,33 @@
+import axios from "axios";
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { BASE_URL } from "../utils/constants";
 
 const UserLogin = () => {
   const[email,setEmail]=useState("");
   const[password,setPassword]=useState("");
-  const[userData,setUserData]=useState({})
-  const submitHandler=(e)=>{
-     e.preventDefault();
+  const [error, setError] = useState("");
 
-     setUserData({
-      email:email,
-      password:password
-     })
 
-     setEmail('')
-     setPassword('')
+    const navigate = useNavigate()
+
+    const handleLogin=async(e)=>{
+        e.preventDefault();
+
+    try {
+
+      await axios.post(BASE_URL+"/login",{
+        email,
+        password
+      },{withCredentials:true});
+
+      return  navigate('/home')
+      
+    } catch (error) {
+      setError(error?.response?.data?.message || "Something went wrong");
+    }
   }
+
   return (
     <div className="p-7 h-screen flex flex-col justify-between">
       <div>
@@ -24,10 +36,7 @@ const UserLogin = () => {
           src="https://freelogopng.com/images/all_img/1659761100uber-logo-png.png"
           alt=""
         />
-      <form onSubmit={(e)=>{
-       
-        submitHandler(e);
-      }}>
+      <form onSubmit={handleLogin}>
         <h3 className="text-lg  font-medium mb-2">What's your email</h3>
         <input required value={email} 
         
