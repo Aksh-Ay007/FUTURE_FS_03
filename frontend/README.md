@@ -1,12 +1,22 @@
-# React + Vite
+# Tailwind CSS Setup Instructions
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+To install and initialize Tailwind CSS in your project, follow these steps:
 
-Currently, two official plugins are available:
+1. **Uninstall any existing versions of Tailwind CSS, PostCSS, and Autoprefixer:**
+   ```bash
+   npm uninstall tailwindcss postcss autoprefixer
+   ```
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+2. **Install specific versions of Tailwind CSS, PostCSS, and Autoprefixer as dev dependencies:**
+   ```bash
+   npm install -D tailwindcss@3.4.3 postcss@8.4.38 autoprefixer@10.4.19
+   ```
 
-## Expanding the ESLint configuration
+3. **Initialize Tailwind CSS and PostCSS configuration files:**
+   ```bash
+   npx tailwindcss init -p
+   ```
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+> **Note:**  
+> These steps will set up Tailwind CSS with compatible versions and generate the required `tailwind.config.js` and `postcss.config.js` files in your project root.
+
