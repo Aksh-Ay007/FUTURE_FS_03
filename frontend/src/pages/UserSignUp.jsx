@@ -9,27 +9,28 @@ const UserSignUp = () => {
   const [ userData, setUserData ] = useState({})
 
 
+const submitHandler = (e) => {
+  e.preventDefault();
 
+  setUserData({
+    firstName: firstName,
+    lastName: lastName,
+    email: email,
+    password: password
+  });
 
-    const submitHandler=(e)=>{
+  console.log({
+    firstName: firstName,
+    lastName: lastName,
+    email: email,
+    password: password
+  });
 
-      e.preventDefault()
-
-      setUserData({
-        fullName:{
-          firstName:firstName,
-          lastName:lastName
-        },
-        email:email,
-        password:password
-      })
-      console.log(userData)
-      setFirstName('')
-      setLastName('')
-      setEmail('')
-      setPassword('')
-    }
-  
+  setFirstName('');
+  setLastName('');
+  setEmail('');
+  setPassword('');
+};
 
     return (
       <div>

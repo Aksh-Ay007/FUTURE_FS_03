@@ -19,10 +19,9 @@ const CaptainSignup = () => {
 const submitHandler = async (e) => {
   e.preventDefault();
   setCaptainData({
-    fullname: {
+    
       firstname: firstName,
-      lastname: lastName
-    },
+      lastname: lastName,
     email: email,
     password: password,
     vehicle: {
