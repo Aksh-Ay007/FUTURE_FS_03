@@ -10,9 +10,11 @@ app.use(cookieParser()); // Use cookie-parser middleware if you need to handle c
 
 const authRouter = require("./routes/auth"); 
 const profileRouter = require("./routes/profile"); // Import the profile router
+const captainRouter = require("./routes/captain"); // Import the captain router
 
 app.use('/',authRouter);
 app.use('/',profileRouter);
+app.use('/',captainRouter); // Use the captain router
 
 
 

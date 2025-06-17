@@ -1,13 +1,11 @@
-const express=require('express')
+const express = require("express");
 const { validateSignupData } = require("../utils/validation"); // Uncomment if you want to use validation utility
 const User = require("../models/user"); // Ensure this is the correct path to your user model
 const { userAuth } = require("../middlewares/auth");
-const bcrypt = require("bcrypt"); // Use bcryptjs for hashing passwords
+const bcrypt = require('bcrypt');// Use bcryptjs for hashing passwords
 const jwt = require("jsonwebtoken"); // Import jsonwebtoken for token handling
 
-
-const authRouter=express.Router()
-
+const authRouter = express.Router();
 
 authRouter.post("/signup", async (req, res) => {
   try {
@@ -70,23 +68,18 @@ authRouter.post("/login", async (req, res) => {
   }
 });
 
-
 authRouter.post("/logout", userAuth, async (req, res) => {
-
-
   try {
-    
-    res.cookie('token',null,{
-      expires: new Date(Date.now())
-    })
+    res.cookie("token", null, {
+      expires: new Date(Date.now()),
+      
+    });
 
     res.send("logout successful");
   } catch (error) {
-    
     res
       .status(500)
       .json({ message: "Internal server error", error: error.message });
   }
-}
-)
-module.exports=authRouter
+});
+module.exports = authRouter;
