@@ -6,28 +6,44 @@ const validateSignupData = (req) => {
     if (!firstName || !lastName) {
         throw new Error('First name and last name are required');
     }
+    else if (firstName.length < 4 || firstName.length > 50) {
+        throw new Error('First name should be 4 to 50 characters');
+    }
     else if (!validator.isEmail(email)) {
-        throw new Error('Invalid email format');
+        throw new Error('Email is not valid');
     }
-    else if (!validator.isStrongPassword(password)) {
-        throw new Error('Password must be at least 8 characters long, contain at least one uppercase letter, one lowercase letter, one number, and one symbol');
+    else if (!validator.isStrongPassword(password, {
+        minLength: 8,
+        minLowercase: 1,
+        minUppercase: 1,
+        minNumbers: 1,
+        minSymbols: 1
+    })) {
+        throw new Error('Password should be strong');
     }
-}
+};
 
 const validationForSignupDataCaptain = (req) => {
     const { firstName, lastName, email, password } = req.body;
-    
-    // Fixed: Get vehicle data from req.body.vehicle
     const { color, plateNumber, capacity, vehicleType } = req.body.vehicle || {};
     
     if (!firstName || !lastName) {
         throw new Error('First name and last name are required');
     }
-    else if (!validator.isEmail(email)) {
-        throw new Error('Invalid email format');
+    else if (firstName.length < 4 || firstName.length > 50) {
+        throw new Error('First name should be 4 to 50 characters');
     }
-    else if (!validator.isStrongPassword(password)) {
-        throw new Error('Password must be at least 8 characters long, contain at least one uppercase letter, one lowercase letter, one number, and one symbol');
+    else if (!validator.isEmail(email)) {
+        throw new Error('Email is not valid');
+    }
+    else if (!validator.isStrongPassword(password, {
+        minLength: 8,
+        minLowercase: 1,
+        minUppercase: 1,
+        minNumbers: 1,
+        minSymbols: 1
+    })) {
+        throw new Error('Password should be strong');
     }
     else if (!color || !plateNumber || !capacity || !vehicleType) {
         throw new Error('Vehicle details are required');

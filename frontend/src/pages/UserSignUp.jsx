@@ -1,7 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { BASE_URL } from "../utils/constants";
+import { useDispatch } from "react-redux";
+import { toast } from "react-toastify";
+
+
+import { addUser } from "../utils/userSlice";
 
 const UserSignUp = () => {
   const [email, setEmail] = useState("");
@@ -10,21 +15,35 @@ const UserSignUp = () => {
   const [lastName, setLastName] = useState("");
   const [error, setError] = useState("");
 
-  const navigate = useNavigate();
+  const dispatch=useDispatch()
 
-  const handleSignUp = async (e) => {
-    e.preventDefault();
-    try {
-     await axios.post(
-        BASE_URL + "/signup",
-        { firstName, lastName, email, password },
-        { withCredentials: true }
-      );
-      navigate("/home");
-    } catch (error) {
-      setError(error?.response?.data?.message || "Something went wrong");
-    }
-  };
+  const navigate = useNavigate();
+const handleSignUp = async (e) => {
+  e.preventDefault();
+  try {
+   const res= await axios.post(
+      BASE_URL + "/signup",
+      { firstName, lastName, email, password },
+      { withCredentials: true }
+    );
+
+    // Use res.data.user if your backend sends { user: ... }
+  const user = res.data.data;
+    dispatch(addUser(user));
+    navigate("/home");
+       // Show success message after successful login
+          toast.success("User Resisted successfully!", {
+            position: "top-center",
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+          });
+  } catch (error) {
+    setError(error?.response?.data?.message || "Something went wrong");
+  }
+};
 
   return (
     <div>

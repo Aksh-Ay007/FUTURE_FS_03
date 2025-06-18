@@ -5,10 +5,10 @@ const cookieParser = require("cookie-parser"); // Import cookie-parser if you ne
 
 const app = express();
 const connectDB = require("./config/database");
-// Enable CORS for your frontend origin and allow credentials (cookies)
+// Configure CORS properly for credentialed requests
 app.use(cors({
-  origin: "http://localhost:5174",
-  credentials: true
+  origin: 'http://localhost:5173', // Your frontend URL
+  credentials: true // Allow credentials (cookies, authorization headers)
 }));
 
 app.use(express.json());
