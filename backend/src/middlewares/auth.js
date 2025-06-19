@@ -33,11 +33,11 @@ const captainAuth = async (req, res, next) => {
   try {
     const { token } = req.cookies;
 
-    if (!token) {
-      throw new Error("token not valid!");
+  if (!token) {
+      res.status(401).send('please Login')
     }
 
-const decodedObj = jwt.verify(token, "uber-captain@123");
+const decodedObj = jwt.verify(token, "uber-captain@1234");
     const { _id } = decodedObj;
 
     const captain = await Captain.findById(_id);

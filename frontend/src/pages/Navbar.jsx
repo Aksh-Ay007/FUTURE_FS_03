@@ -4,31 +4,75 @@ import { useSelector, useDispatch } from 'react-redux';
 import axios from 'axios';
 import { BASE_URL } from '../utils/constants';
 import { removeUser } from '../utils/userSlice';
-
+import { removeCaptain } from '../utils/captainSlice';
 
 const Navbar = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false);
   
   const user = useSelector((state) => state.user);
+  const captain = useSelector((state) => state.captain);
   const dispatch = useDispatch();
-    const navigate = useNavigate();
+  const navigate = useNavigate();
 
+  // Determine current user (either user or captain)
+  const currentUser = user || captain;
+  const isCaptain = Boolean(captain);
 
-const handleLogout = async () => {
-  try {
-    await axios.post(
-      BASE_URL + '/logout',
-      null, // No body
-      { withCredentials: true }
-    );
-    dispatch(removeUser());
-    navigate('/login');
-    setIsProfileDropdownOpen(false);
-  } catch (error) {
-    console.log(error);
-  }
-};
+  // Handle display name properly for both user and captain
+  const getDisplayName = () => {
+    if (!currentUser) return '';
+    
+    if (currentUser.firstName && currentUser.lastName) {
+      return `${currentUser.firstName} ${currentUser.lastName}`;
+    }
+    if (currentUser.firstName) {
+      return currentUser.firstName;
+    }
+    if (currentUser.name) {
+      return currentUser.name;
+    }
+    return isCaptain ? 'Captain' : 'User';
+  };
+
+  // Get avatar initial
+  const getAvatarInitial = () => {
+    if (!currentUser) return isCaptain ? 'C' : 'U';
+    
+    if (currentUser.firstName) {
+      return currentUser.firstName.charAt(0).toUpperCase();
+    }
+    if (currentUser.name) {
+      return currentUser.name.charAt(0).toUpperCase();
+    }
+    return isCaptain ? 'C' : 'U';
+  };
+
+  const displayName = getDisplayName();
+  const avatarInitial = getAvatarInitial();
+
+  const handleLogout = async () => {
+    try {
+      const logoutEndpoint = isCaptain ? '/captain/logout' : '/logout';
+      await axios.post(
+        BASE_URL + logoutEndpoint,
+        null,
+        { withCredentials: true }
+      );
+      
+      if (isCaptain) {
+        dispatch(removeCaptain());
+        navigate('/captain/login');
+      } else {
+        dispatch(removeUser());
+        navigate('/login');
+      }
+      
+      setIsProfileDropdownOpen(false);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const toggleModal = () => {
     setIsModalOpen(!isModalOpen);
@@ -49,7 +93,7 @@ const handleLogout = async () => {
             </Link>
           </div>
 
-          {/* Center - Rider/Help Button */}
+          {/* Center - Services Button */}
           <div className="hidden md:flex items-center">
             <button 
               onClick={toggleModal}
@@ -64,19 +108,24 @@ const handleLogout = async () => {
 
           {/* Right side - User Profile or Login/Signup */}
           <div className="flex items-center space-x-4">
-            {user ? (
-              /* User is logged in */
+            {currentUser ? (
+              /* User/Captain is logged in */
               <div className="relative">
                 <button 
                   onClick={toggleProfileDropdown}
                   className="flex items-center space-x-3 text-white hover:text-gray-300 transition-colors duration-200"
                 >
-                  <div className="w-8 h-8 bg-gray-600 rounded-full flex items-center justify-center">
+                  <div className={`w-8 h-8 ${isCaptain ? 'bg-yellow-600' : 'bg-gray-600'} rounded-full flex items-center justify-center`}>
                     <span className="text-sm font-medium">
-                      {user.name ? user.name.charAt(0).toUpperCase() : 'U'}
+                      {avatarInitial}
                     </span>
                   </div>
-                  <span className="hidden sm:block">{user.name || 'User'}</span>
+                  <div className="hidden sm:block">
+                    <span className="block text-sm">{displayName}</span>
+                    {isCaptain && (
+                      <span className="block text-xs text-yellow-400">Captain</span>
+                    )}
+                  </div>
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                   </svg>
@@ -86,9 +135,15 @@ const handleLogout = async () => {
                 {isProfileDropdownOpen && (
                   <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg py-2 z-50">
                     <div className="px-4 py-2 border-b border-gray-200">
-                      <p className="text-sm font-medium text-gray-900">{user.name}</p>
-                      <p className="text-sm text-gray-500">{user.email}</p>
+                      <p className="text-sm font-medium text-gray-900">{displayName}</p>
+                      <p className="text-sm text-gray-500">{currentUser.email}</p>
+                      {isCaptain && (
+                        <span className="inline-block mt-1 px-2 py-1 text-xs bg-yellow-100 text-yellow-800 rounded-full">
+                          Captain
+                        </span>
+                      )}
                     </div>
+                    
                     <Link 
                       to="/profile" 
                       className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
@@ -96,13 +151,43 @@ const handleLogout = async () => {
                     >
                       Profile Settings
                     </Link>
-                    <Link 
-                      to="/rides" 
-                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                      onClick={() => setIsProfileDropdownOpen(false)}
-                    >
-                      Your Rides
-                    </Link>
+                    
+                    {isCaptain ? (
+                      <>
+                        <Link 
+                          to="/captain-feed" 
+                          className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                          onClick={() => setIsProfileDropdownOpen(false)}
+                        >
+                          Dashboard
+                        </Link>
+                        <Link 
+                          to="/captain/earnings" 
+                          className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                          onClick={() => setIsProfileDropdownOpen(false)}
+                        >
+                          Earnings
+                        </Link>
+                        <Link 
+                          to="/captain/trips" 
+                          className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                          onClick={() => setIsProfileDropdownOpen(false)}
+                        >
+                          Trip History
+                        </Link>
+                      </>
+                    ) : (
+                      <>
+                        <Link 
+                          to="/rides" 
+                          className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                          onClick={() => setIsProfileDropdownOpen(false)}
+                        >
+                          Your Rides
+                        </Link>
+                      </>
+                    )}
+                    
                     <Link 
                       to="/help" 
                       className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
@@ -169,7 +254,7 @@ const handleLogout = async () => {
             
             <div className="space-y-3">
               <Link 
-                to="/rider" 
+                to="/" 
                 className="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-100 transition-colors duration-200"
                 onClick={toggleModal}
               >
@@ -185,17 +270,17 @@ const handleLogout = async () => {
               </Link>
 
               <Link 
-                to="/driver" 
+                to="/captain/login" 
                 className="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-100 transition-colors duration-200"
                 onClick={toggleModal}
               >
-                <div className="w-10 h-10 bg-black rounded-full flex items-center justify-center">
+                <div className="w-10 h-10 bg-yellow-600 rounded-full flex items-center justify-center">
                   <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                   </svg>
                 </div>
                 <div>
-                  <h3 className="font-medium text-gray-900">Driver</h3>
+                  <h3 className="font-medium text-gray-900">Captain</h3>
                   <p className="text-sm text-gray-500">Drive and earn</p>
                 </div>
               </Link>

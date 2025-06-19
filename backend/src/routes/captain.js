@@ -45,7 +45,7 @@ captainRouter.post("/captain/signup", async (req, res) => {
     
     res.status(201).json({ 
       message: "Captain created successfully", 
-      captain: {
+      data: {
         _id: captain._id,
         firstName: captain.firstName,
         lastName: captain.lastName,
@@ -98,7 +98,18 @@ captainRouter.post("/captain/login", async (req, res) => {
         expires: new Date(Date.now() + 8 * 3600000), // 8 hours
         httpOnly: true,
       });
-      res.json({ message: "Login successful" });
+      
+      // Return captain data like user login does
+      res.json({ 
+        message: "Login successful",
+        data: {
+          _id: captain._id,
+          firstName: captain.firstName,
+          lastName: captain.lastName,
+          email: captain.email,
+          vehicle: captain.vehicle
+        }
+      });
     } else {
       res.status(401).json({ message: "Invalid credentials" });
     }

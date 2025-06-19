@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { BASE_URL } from '../utils/constants';
+import { useDispatch } from 'react-redux';
+import { addCaptain } from '../utils/captainSlice';
 
 const CaptainSignup = () => {
   const [email, setEmail] = useState('');
@@ -15,11 +17,12 @@ const CaptainSignup = () => {
   const [error, setError] = useState('');
 
   const navigate = useNavigate();
+  const dispatch=useDispatch()
 
   const handleSignUp = async (e) => {
     e.preventDefault();
     try {
-      await axios.post(
+      const res=await axios.post(
         BASE_URL + "/captain/signup",
         {
           firstName,
@@ -35,7 +38,9 @@ const CaptainSignup = () => {
         },
         { withCredentials: true }
       );
-      navigate("/rider-home");
+const captain=res.data
+      dispatch(addCaptain(captain))
+      navigate("/captain-feed");
     } catch (error) {
       setError(error?.response?.data?.message || "Something went wrong");
     }

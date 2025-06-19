@@ -74,7 +74,7 @@ const captainSchema = new mongoose.Schema({
 
 captainSchema.methods.getJWT = async function() {
     const captain = this;
-    const token = jwt.sign({ _id: captain._id }, "uber-captain@123", { expiresIn: "1d" });
+    const token = jwt.sign({ _id: captain._id }, "uber-captain@1234", { expiresIn: "1d" });
     return token;
 }
 
