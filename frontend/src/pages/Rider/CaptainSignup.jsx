@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { BASE_URL } from '../utils/constants';
+import { BASE_URL } from '../../utils/constants';
 import { useDispatch } from 'react-redux';
-import { addCaptain } from '../utils/captainSlice';
+import { addCaptain } from '../../utils/captainSlice';
 
 const CaptainSignup = () => {
   const [email, setEmail] = useState('');

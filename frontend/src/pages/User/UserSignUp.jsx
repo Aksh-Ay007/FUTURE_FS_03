@@ -1,12 +1,12 @@
 import React, { useState, } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
-import { BASE_URL } from "../utils/constants";
+import { BASE_URL } from "../../utils/constants";
 import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 
 
-import { addUser } from "../utils/userSlice";
+import { addUser } from "../../utils/userSlice";
 
 const UserSignUp = () => {
   const [email, setEmail] = useState("");

@@ -3,8 +3,7 @@ import { useSelector } from 'react-redux'
 
 const CaptainDetails = () => {
 
-    const captain=useSelector((store)=>store.captain.data)
-
+  const captain = useSelector(store => store.captain);
     console.log(captain,'captain details')
   return (
    

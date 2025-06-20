@@ -3,9 +3,9 @@ import { Link } from 'react-router-dom'
 import { useGSAP } from '@gsap/react'
 import gsap from 'gsap'
 
-import CaptainDetails from '../components/CaptainDetails'
-import RidePopUp from '../components/RidePopUp'
-import ConfirmRidePopUp from '../components/ConfirmRidePopUp'
+import CaptainDetails from '../../components/Captain/CaptainDetails'
+import RidePopUp from '../../components/Captain/RidePopUp'
+import ConfirmRidePopUp from '../../components/Captain/ConfirmRidePopUp'
 import { useSelector } from 'react-redux'
 
 const CaptainFeed = () => {
@@ -15,8 +15,7 @@ const CaptainFeed = () => {
     const confirmRidePopupPanelRef = useRef(null)
     const [ride, setRide] = useState(null)
 
-    const captain = useSelector((store) => store.captain.data)
-
+  const captain = useSelector(store => store.captain);
     console.log('Captain Feed Page Rendered',captain)
 
     // Dummy function for confirmRide
@@ -67,13 +66,14 @@ const CaptainFeed = () => {
                 <CaptainDetails />
             </div>
 
-            <div ref={ridePopupPanelRef} className='fixed w-full z-10 bottom-0 translate-y-full bg-white px-3 py-10 pt-12'>
-                <RidePopUp
-                    setRidePopupPanel={setRidePopupPanel}
-                    setConfirmRidePopupPanel={setConfirmRidePopupPanel}
-                    confirmRide={confirmRide}
-                />
-            </div>
+          <div ref={ridePopupPanelRef} className='fixed w-full z-10 bottom-0 translate-y-full bg-white px-3 py-10 pt-12'>
+    <RidePopUp
+        ride={ride}  // ← Add this line
+        setRidePopupPanel={setRidePopupPanel}
+        setConfirmRidePopupPanel={setConfirmRidePopupPanel}
+        confirmRide={confirmRide}
+    />
+</div>
 
             <div ref={confirmRidePopupPanelRef} className='fixed w-full h-screen z-10 bottom-0 translate-y-full bg-white px-3 py-10 pt-12'>
                 <ConfirmRidePopUp

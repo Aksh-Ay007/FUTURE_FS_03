@@ -5,13 +5,13 @@ import { Routes, Route } from 'react-router-dom';
 import { BrowserRouter } from 'react-router-dom'
 import {Provider} from 'react-redux'
 import appStore from './utils/appStore'
-import UserLogin from './pages/UserLogin';
-import UserSignUp from './pages/UserSignUp';
-import CaptainLogin from './pages/CaptainLogin';
-import CaptainSignup from './pages/CaptainSignup';
-import Feed from './pages/Feed'; 
+import UserLogin from './pages/User/UserLogin';
+import UserSignUp from './pages/User/UserSignUp';
+import CaptainLogin from './pages/Rider/CaptainLogin';
+import CaptainSignup from './pages/Rider/CaptainSignup';
+import Feed from './pages/User/Feed'; 
 import Body from './pages/Body';
-import CaptainFeed from './pages/CaptainFeed';
+import CaptainFeed from './pages/Rider/CaptainFeed';
 
 
 const App = () => {
