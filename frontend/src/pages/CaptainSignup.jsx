@@ -47,7 +47,7 @@ const captain=res.data
   };
 
   return (
-    <div className='py-5 px-5 h-screen flex flex-col justify-between'>
+    <div className='py-5 px-5 min-h-screen flex flex-col'>
       <div>
         <img className='w-20 mb-3' src="https://www.svgrepo.com/show/505031/uber-driver.svg" alt="" />
 
@@ -140,10 +140,6 @@ const captain=res.data
           >Create Captain Account</button>
         </form>
         <p className='text-center'>Already have a account? <Link to='/captain-login' className='text-blue-600'>Login here</Link></p>
-      </div>
-      <div>
-        <p className='text-[10px] mt-6 leading-tight'>This site is protected by reCAPTCHA and the <span className='underline'>Google Privacy
-          Policy</span> and <span className='underline'>Terms of Service apply</span>.</p>
       </div>
     </div>
   );
