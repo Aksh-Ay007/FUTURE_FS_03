@@ -15,49 +15,65 @@ const Body = () => {
   
   const user = useSelector(store => store.user);
   const captain = useSelector(store => store.captain);
-  const wholeStore = useSelector(store => store); // Debug: log entire store
 
-  console.log("Redux store state:", wholeStore); // Debug log
-  console.log("User from store:", user);
-  console.log("Captain from store:", captain);
+  console.log("Redux store state:", { user, captain });
+  console.log("Current path:", location.pathname);
 
   const fetchUser = async () => {
-    if (user || captain) return;
+    console.log("fetchUser called for path:", location.pathname);
     
     try {
       if (location.pathname.includes('captain')) {
-        // Try captain first for captain routes
+        console.log("Attempting to fetch captain profile...");
+        
         const captainRes = await axios.get(BASE_URL + "/captain/profile", {
           withCredentials: true,
         });
         
         const captainData = captainRes.data;
-        console.log("body captain", captainData);
+        console.log("Captain data received:", captainData);
         dispatch(addCaptain(captainData));
+        console.log("Captain data dispatched to Redux store");
+        
       } else {
-        // Try user first for user routes
+        console.log("Attempting to fetch user profile...");
+        
         const userRes = await axios.get(BASE_URL + "/profile", {
           withCredentials: true,
         });
         
         const userData = userRes.data;
-        console.log("body user", userData);
+        console.log("User data received:", userData);
         dispatch(addUser(userData));
+        console.log("User data dispatched to Redux store");
       }
     } catch (error) {
+      console.error("API Error:", error);
+      console.error("Error response:", error.response?.data);
+      console.error("Error status:", error.response?.status);
+      
       // Handle auth failure
       if (location.pathname.includes('captain')) {
+        console.log("Redirecting to captain login due to auth failure");
         navigate('/captain-login');
       } else {
+        console.log("Redirecting to user login due to auth failure");
         navigate('/login');
       }
-      console.log("Auth failed:", error);
     }
   };
 
   useEffect(() => {
+    console.log("Body useEffect triggered");
+    console.log("Current user state:", user);
+    console.log("Current captain state:", captain);
+    console.log("Location pathname:", location.pathname);
+    
+    // Always fetch data - remove the early return condition for now
     fetchUser();
-  }, []);
+  }, [location.pathname]); // Re-run when path changes
+
+  console.log("Body component rendered");
 
   return (
     <div>
@@ -67,4 +83,5 @@ const Body = () => {
     </div>
   );
 };
+
 export default Body;

@@ -1,8 +1,7 @@
 import React from 'react'
 
 const RidePopUp = (props) => {
-
-       console.log('RidePopUp props:', props);
+    console.log('RidePopUp props:', props);
     console.log('Ride data:', props.ride);
 
     return (
@@ -14,36 +13,39 @@ const RidePopUp = (props) => {
             <div className='flex items-center justify-between p-3 bg-yellow-400 rounded-lg mt-4'>
                 <div className='flex items-center gap-3 '>
                     <img className='h-12 rounded-full object-cover w-12' src="https://i.pinimg.com/236x/af/26/28/af26280b0ca305be47df0b799ed1b12b.jpg" alt="" />
-                    <h2 className='text-lg font-medium'>Rahul Sharma</h2>
+                    <h2 className='text-lg font-medium'>{props.ride?.user?.name || 'Rahul Sharma'}</h2>
                 </div>
-                <h5  className='text-lg font-semibold'>2.2 KM</h5>
+                <h5 className='text-lg font-semibold'>{props.ride?.distance || '2.2 KM'}</h5>
             </div>
             <div className='flex gap-2 justify-between flex-col items-center'>
                 <div className='w-full mt-5'>
                     <div className='flex items-center gap-5 p-3 border-b-2'>
                         <i className="ri-map-pin-user-fill"></i>
                         <div>
-                            <h3 className='text-lg font-medium'>562/11-A</h3>
-                            <p className='text-sm -mt-1 text-gray-600'>Marine Drive, Kochi</p>
+                            <h3 className='text-lg font-medium'>{props.ride?.pickup?.address || '562/11-A'}</h3>
+                            <p className='text-sm -mt-1 text-gray-600'>{props.ride?.pickup?.location || 'Marine Drive, Kochi'}</p>
                         </div>
                     </div>
                     <div className='flex items-center gap-5 p-3 border-b-2'>
                         <i className="text-lg ri-map-pin-2-fill"></i>
                         <div>
-                            <h3 className='text-lg font-medium'>789/12-C</h3>
-                            <p className='text-sm -mt-1 text-gray-600'>MG Road, Ernakulam</p>
+                            <h3 className='text-lg font-medium'>{props.ride?.destination?.address || '789/12-C'}</h3>
+                            <p className='text-sm -mt-1 text-gray-600'>{props.ride?.destination?.location || 'MG Road, Ernakulam'}</p>
                         </div>
                     </div>
                     <div className='flex items-center gap-5 p-3'>
                         <i className="ri-currency-line"></i>
                         <div>
-                            <h3 className='text-lg font-medium'>₹185</h3>
+                            <h3 className='text-lg font-medium'>₹{props.ride?.fare || '185'}</h3>
                             <p className='text-sm -mt-1 text-gray-600'>Cash Payment</p>
                         </div>
                     </div>
                 </div>
                 <div className='mt-5 w-full '>
-                    <button onClick={() => {
+                    {/* Fixed: Removed duplicate state setting and fixed logic */}
+                   <div>
+
+                     <button onClick={() => {
                         props.setConfirmRidePopupPanel(true)
                         if (props.confirmRide) {
                             props.confirmRide()
@@ -53,6 +55,7 @@ const RidePopUp = (props) => {
                     <button onClick={() => {
                         props.setRidePopupPanel(false)
                     }} className='mt-2 w-full bg-gray-300 text-gray-700 font-semibold p-2 px-10 rounded-lg'>Ignore</button>
+                   </div>
                 </div>
             </div>
         </div>

@@ -12,6 +12,9 @@ import CaptainSignup from './pages/Rider/CaptainSignup';
 import Feed from './pages/User/Feed'; 
 import Body from './pages/Body';
 import CaptainFeed from './pages/Rider/CaptainFeed';
+import CaptainRiding from './pages/Rider/CaptainRiding';
+import Riding from './pages/Rider/Riding';
+
 
 
 const App = () => {
@@ -41,6 +44,8 @@ const App = () => {
         <Route path='/captain-signup' element={<CaptainSignup/>} />
         <Route path='/' element={<Feed/>} />
         <Route path='/captain-feed' element={<CaptainFeed/>} />
+        <Route path='/captain-riding' element={<CaptainRiding/>} />
+        <Route path='/riding' element={<Riding/>} />
 
 
         </Route>

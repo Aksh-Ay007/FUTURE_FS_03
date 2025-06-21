@@ -13,15 +13,20 @@ const CaptainFeed = () => {
     const [confirmRidePopupPanel, setConfirmRidePopupPanel] = useState(false)
     const ridePopupPanelRef = useRef(null)
     const confirmRidePopupPanelRef = useRef(null)
-    const [ride, setRide] = useState(null)
+    const [ride, setRide] = useState({
+        user: { name: 'Rahul Sharma' },
+        pickup: { address: '562/11-A', location: 'Marine Drive, Kochi' },
+        destination: { address: '789/12-C', location: 'MG Road, Ernakulam' },
+        fare: 185,
+        distance: '2.2 KM'
+    })
 
-  const captain = useSelector(store => store.captain);
-    console.log('Captain Feed Page Rendered',captain)
+    const captain = useSelector(store => store.captain);
+    console.log('Captain Feed Page Rendered', captain)
 
-    // Dummy function for confirmRide
+    // Fixed confirmRide function
     const confirmRide = () => {
         console.log('Ride confirmed')
-        setRidePopupPanel(false)
         setConfirmRidePopupPanel(true)
     }
 
@@ -53,7 +58,7 @@ const CaptainFeed = () => {
         <div className="h-screen relative">
             <div className='fixed p-6 flex items-center justify-between w-screen'>
                 <img className='w-16' src="https://upload.wikimedia.org/wikipedia/commons/c/cc/Uber_logo_2018.png" alt="" />
-                <Link to='/captain-home' className='h-10 w-10 bg-white flex items-center justify-center rounded-full'>
+                <Link to='/captain-feed' className='h-10 w-10 bg-white flex items-center justify-center rounded-full'>
                     <i className="text-lg font-medium ri-logout-box-r-line"></i>
                 </Link>
             </div>
@@ -66,16 +71,24 @@ const CaptainFeed = () => {
                 <CaptainDetails />
             </div>
 
-          <div ref={ridePopupPanelRef} className='fixed w-full z-10 bottom-0 translate-y-full bg-white px-3 py-10 pt-12'>
-    <RidePopUp
-        ride={ride}  // ← Add this line
-        setRidePopupPanel={setRidePopupPanel}
-        setConfirmRidePopupPanel={setConfirmRidePopupPanel}
-        confirmRide={confirmRide}
-    />
-</div>
+            {/* Fixed: Added onClick to trigger popup for testing */}
+            <div 
+                onClick={() => setRidePopupPanel(true)}
+                className='fixed bottom-20 right-6 bg-green-500 text-white p-4 rounded-full cursor-pointer'
+            >
+                🚗
+            </div>
 
-            <div ref={confirmRidePopupPanelRef} className='fixed w-full h-screen z-10 bottom-0 translate-y-full bg-white px-3 py-10 pt-12'>
+            <div ref={ridePopupPanelRef} className='fixed w-full z-10 bottom-0 translate-y-full bg-white px-3 py-10 pt-12'>
+                <RidePopUp
+                    ride={ride}
+                    setRidePopupPanel={setRidePopupPanel}
+                    setConfirmRidePopupPanel={setConfirmRidePopupPanel}
+                    confirmRide={confirmRide}
+                />
+            </div>
+
+            <div ref={confirmRidePopupPanelRef} className='fixed w-full  z-10 bottom-0 translate-y-full bg-white px-3 py-10 pt-12'>
                 <ConfirmRidePopUp
                     ride={ride}
                     setConfirmRidePopupPanel={setConfirmRidePopupPanel}
